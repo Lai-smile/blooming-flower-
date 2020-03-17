@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from .serializers import MyRadangSerializer
 from rest_framework.views import Response
 # Create your views here.
+
 class RadangView(APIView):
     def get(self,request):
         return render(request, 'register.html')
@@ -17,3 +18,10 @@ class RadangView(APIView):
             return Response(radang.data)
         else:
             return Response(radang.errors)
+
+def home(request):
+        return render(request,'home.html')
+
+
+def articaleSpider(request):
+    return render(request, 'article.html')
