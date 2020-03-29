@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>胃炎分析与检测</title>
-    <link rel="stylesheet" href="../static/css/jquery.mobile.min.css" type="text/css">
+    <link rel="stylesheet" href="/static/css/jquery.mobile.min.css" type="text/css">
     <script src="/static/js/jquery-1.7.1.min.js" type="text/javascript"></script>
     <script src="/static/js/jquery.mobile.min.js" type="text/javascript"></script>
 </head>
@@ -187,6 +187,7 @@
             $.post('',data,function (res) {
                 console.log(res)
             })
+            parent.location.href="/home/"
         })
     </script>
 </div>

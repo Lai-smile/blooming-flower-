@@ -24,6 +24,9 @@ from django.conf.urls import url,static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('radang/', views.RadangView.as_view()),
+    path('home/', views.home),
+    path('article/', views.articaleSpider),
+    path('myform/', views.AnalyzeView.as_view()),
 ]
 #如果setting文件中debug=False，那么就遍历整个static文件来匹配合适的静态文件
 if settings.DEBUG==False:
