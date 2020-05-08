@@ -34,6 +34,8 @@ def articaleSpider(request):
 class AnalyzeView(APIView):
     def get(self, request):
         import pandas as pd
+        from pyecharts.charts import Pie
+        from pyecharts import options
         data = pd.read_csv('static/gpm.csv')
         gastritis_df = pd.DataFrame(data)
         # print(gastritis_df)
@@ -47,21 +49,34 @@ class AnalyzeView(APIView):
         rate_gastritis = round(ill_people / num_people, 2)
         rate_ungastritis = round(1 - rate_gastritis, 2)
         print("被测人群患胃炎的比率是%.2f" % rate_gastritis)
-        from pyecharts.charts import Pie
-        from pyecharts import options
         # 定义标签集合
         arr = ['得病率', '未得病率']
         datas = [rate_gastritis, rate_ungastritis]
-        pie = (
+        ill_pie = (
             Pie()
                 .add('', [list(z) for z in zip(arr, datas)])
                 .set_global_opts(title_opts=options.TitleOpts(title='胃炎得病率分析'))
                 .set_series_opts(label_opts=options.LabelOpts(formatter="{b}:{c}"))
         )
+        # 2、男性女性得病比率是多少?
+        ill_female = gastritis_df[(gastritis_df['Sex'] == 0) & (gastritis_df['gastritis'] == 1)]['ID'].count()
+        rate_female = round(ill_female / ill_people, 2)
+        rate_male = round(1 - rate_female, 2)
+        print("被测男性患胃炎的比率是%.2f" % rate_male)
+        print("被测女性患胃炎的比率是%.2f" % rate_female)
+        # 定义标签集合
+        sex_arr = ['男性得病率', '女性得病率']
+        sex_datas = [rate_male, rate_female]
+        sex_pie = (
+            Pie()
+                .add('', [list(z) for z in zip(sex_arr, sex_datas)])
+                .set_global_opts(title_opts=options.TitleOpts(title='男女胃炎得病率分析'))
+                .set_series_opts(label_opts=options.LabelOpts(formatter="{b}:{c}"))
+        )
+        # 3、是否吸烟对胃炎有影响?
+        # 4、是否喝酒对胃炎有影响。
         myform = {
-            "formdata": pie.render_embed()
+            "ill_formdata": ill_pie.render_embed(),
+            "sex_formdata": sex_pie.render_embed()
         }
         return render(request, 'analyse.html', myform)
-        # 2、男性女性得病比率是多少?
-        # 3、是否吸烟对高血压病有影响?
-        # 4、是否喝酒对高血压病有影响。
